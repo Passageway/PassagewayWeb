@@ -93,6 +93,7 @@ This installs the element sets (Paper, Iron, Platinum) and tools the starter kit
 To update Bower dependencies:  
 ```sh
 bower install paper-time-picker
+bower install iron-flex-layout
 ```
 
 ### Development workflow
