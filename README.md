@@ -58,11 +58,17 @@ The full starter kit requires the following major dependencies:
 node --version
 ```
 
-The version should be at or above v6.6.0. Otherwise run:
+The version should be at or above v6.6.0. 
+
+__Ubuntu__  
+Otherwise run:
 ```sh
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 sudo apt-get install -y nodejs
 ```
+
+__Windows__  
+Use the [Windows Installer](https://nodejs.org/en/#download)
 
 2)  If you don't have Node.js installed, or you have a lower version, go to [nodejs.org](https://nodejs.org) and click on the big green Install button.
 
