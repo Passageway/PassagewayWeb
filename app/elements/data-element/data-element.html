@@ -11,7 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="..\..\bower_components/polymer/polymer.html">
 
 <dom-module id="data-element">
-  <template>
+    <template>
     <style>
       :host {
         display: block;
@@ -22,21 +22,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </google-chart>
     </paper-material>
   </template>
-  <script>
-  (function() {
-    'use strict';
+    <script>
+        (function() {
+            'use strict';
 
-    Polymer({
-      is: 'data-element',
+            Polymer({
+                is: 'data-element',
 
-      properties: {
-        foo: {
-          type: String,
-          value: 'data-element',
-          notify: true
-        }
-      }
-    });
-  })();
-  </script>
+                properties: {
+                    foo: {
+                        type: String,
+                        value: 'data-element',
+                        notify: true
+                    }
+                }
+            });
+        })();
+    </script>
 </dom-module>

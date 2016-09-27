@@ -11,7 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 
 <dom-module id="filter-view">
-  <template>
+    <template>
     <style>
       .header {
           font-family: 'Roboto Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -79,33 +79,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-fab class="applyFilter" icon="check"></paper-fab>
     </paper-material>
   </template>
-  <script>
-  (function() {
-    'use strict';
+    <script>
+        (function() {
+            'use strict';
 
-    Polymer({
-      is: 'filter-view',
+            Polymer({
+                is: 'filter-view',
 
-      properties: {
-        foo: {
-          type: String,
-          value: 'filter-view',
-          notify: true
-        }
-      },
-      toggleStartDate: function(){
-        document.getElementById('dialogStartDate').toggle();
-      },
-      toggleStartTime: function(){
-        document.getElementById('dialogStartTime').toggle();
-      },
-      toggleEndDate: function(){
-        document.getElementById('dialogEndDate').toggle();
-      },
-      toggleEndTime: function(){
-        document.getElementById('dialogEndTime').toggle();
-      }
-    });
-  })();
-  </script>
+                properties: {
+                    foo: {
+                        type: String,
+                        value: 'filter-view',
+                        notify: true
+                    }
+                },
+                toggleStartDate: function() {
+                    document.getElementById('dialogStartDate').toggle();
+                },
+                toggleStartTime: function() {
+                    document.getElementById('dialogStartTime').toggle();
+                },
+                toggleEndDate: function() {
+                    document.getElementById('dialogEndDate').toggle();
+                },
+                toggleEndTime: function() {
+                    document.getElementById('dialogEndTime').toggle();
+                }
+            });
+        })();
+    </script>
 </dom-module>

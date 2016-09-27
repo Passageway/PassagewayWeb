@@ -11,7 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 
 <dom-module id="map-element">
-  <template>
+    <template>
     <style>
       :host {
         display: block;
@@ -43,120 +43,122 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-material>
     </paper-material>
   </template>
-  <script>
-    (function() {
-      'use strict';
+    <script>
+        (function() {
+            'use strict';
 
-      Polymer({
-        is: 'map-element',
+            Polymer({
+                is: 'map-element',
 
-        properties: {
-          heatData: {
-            /* this property corresponds to the attribute heat-data */
-            type: Array,
-            observer: "_heatDataChanged"
-          },
-          foo: {
-            type: String,
-            value: 'heat-map',
-            notify: true
-          },
-          location: {
-            type: String,
-            observer: 'locationSelected'
-          },
-          sensorData: Array,
-          overlay: Object,
-          hmap: Object,
-          latitude: Object,
-          longitude: Object
-        },
-        _heatDataChanged: function (newVal, oldVal) {
-          console.log('Heat data changed from ', oldVal, ' to ', newVal);
-          var elem = this.$$('google-map');
-          this.sensorData = [];
-          for (var k = 0; k < this.heatData.length; k++) {
-              this.push('sensorData', {
-                location: new google.maps.LatLng(
-                  this.heatData[k].lat, this.heatData[k].lon), weight: this.heatData[k].weight
-              });
-          }
-          this.hmap.setData(this.sensorData);
-          this.hmap.setMap(elem.map);
-        },
-        _ApiLoaded: function (e) {
-          console.log('ApiLoaded: ', e);
-          var elem = this.$$('google-map');
-          this.sensorData = [];
-          if (this.heatData) {
-            for (var k = 0; k < this.heatData.length; k++) {
-                this.push('sensorData', {
-                  location: new google.maps.LatLng(
-                    this.heatData[k].lat, this.heatData[k].lon), weight: this.heatData[k].weight
-                });
-            }
-          }
-          this.hmap = new google.maps.visualization.HeatmapLayer();
-          this.hmap.setData(this.sensorData);
+                properties: {
+                    heatData: {
+                        /* this property corresponds to the attribute heat-data */
+                        type: Array,
+                        observer: "_heatDataChanged"
+                    },
+                    foo: {
+                        type: String,
+                        value: 'heat-map',
+                        notify: true
+                    },
+                    location: {
+                        type: String,
+                        observer: 'locationSelected'
+                    },
+                    sensorData: Array,
+                    overlay: Object,
+                    hmap: Object,
+                    latitude: Object,
+                    longitude: Object
+                },
+                _heatDataChanged: function(newVal, oldVal) {
+                    console.log('Heat data changed from ', oldVal, ' to ', newVal);
+                    var elem = this.$$('google-map');
+                    this.sensorData = [];
+                    for (var k = 0; k < this.heatData.length; k++) {
+                        this.push('sensorData', {
+                            location: new google.maps.LatLng(
+                                this.heatData[k].lat, this.heatData[k].lon),
+                            weight: this.heatData[k].weight
+                        });
+                    }
+                    this.hmap.setData(this.sensorData);
+                    this.hmap.setMap(elem.map);
+                },
+                _ApiLoaded: function(e) {
+                    console.log('ApiLoaded: ', e);
+                    var elem = this.$$('google-map');
+                    this.sensorData = [];
+                    if (this.heatData) {
+                        for (var k = 0; k < this.heatData.length; k++) {
+                            this.push('sensorData', {
+                                location: new google.maps.LatLng(
+                                    this.heatData[k].lat, this.heatData[k].lon),
+                                weight: this.heatData[k].weight
+                            });
+                        }
+                    }
+                    this.hmap = new google.maps.visualization.HeatmapLayer();
+                    this.hmap.setData(this.sensorData);
 
-          //change radius of points
-          this.hmap.set('radius', this.hmap.get('radius') ? null : 25);
-          this.hmap.set('dissipating', true);
+                    //change radius of points
+                    this.hmap.set('radius', this.hmap.get('radius') ? null : 25);
+                    this.hmap.set('dissipating', true);
 
-          this.hmap.setMap(elem.map);
-        },
-        locationSelected: function(newVal, oldVal){
-          console.log('locationSelect. oldVal: ', oldVal, ' newVal: ', newVal);
-          var query = new Parse.Query ('Blueprints');
-          query.matches('Description', this.location);
-          /* Use Java promises */
-          query.find().then(
-            this._overlayLoaded.bind(this),
-            this._overlayErr.bind(this)
-          );
-          console.log(newVal);
-        },
-        _overlayLoaded:function(results) {
-          var elem = this.$$('google-map');
+                    this.hmap.setMap(elem.map);
+                },
+                locationSelected: function(newVal, oldVal) {
+                    console.log('locationSelect. oldVal: ', oldVal, ' newVal: ', newVal);
+                    var query = new Parse.Query('Blueprints');
+                    query.matches('Description', this.location);
+                    /* Use Java promises */
+                    query.find().then(
+                        this._overlayLoaded.bind(this),
+                        this._overlayErr.bind(this)
+                    );
+                    console.log(newVal);
+                },
+                _overlayLoaded: function(results) {
+                    var elem = this.$$('google-map');
 
-          //reset the overlay
-          if(this.overlay) this.overlay.setMap(null);
+                    //reset the overlay
+                    if (this.overlay) this.overlay.setMap(null);
 
-          //blueprint image
-          var theImage = results[0].get('image');
+                    //blueprint image
+                    var theImage = results[0].get('image');
 
-          //coordinate to zoom to
-          var midPoint = results[0].get('midPoint');
-          this.latitude = midPoint.latitude;
-          this.longitude = midPoint.longitude;
+                    //coordinate to zoom to
+                    var midPoint = results[0].get('midPoint');
+                    this.latitude = midPoint.latitude;
+                    this.longitude = midPoint.longitude;
 
 
-          //TODO get this from parse
-          var imageBounds = {
-            north: 42.967422,
-            south: 42.965963,
-            east: -85.886085,
-            west: -85.887585
-          };
+                    //TODO get this from parse
+                    var imageBounds = {
+                        north: 42.967422,
+                        south: 42.965963,
+                        east: -85.886085,
+                        west: -85.887585
+                    };
 
-          //display the overlay image
-          this.overlay = new google.maps.GroundOverlay(
-            theImage.url(), imageBounds);
-          if(this.$$('paper-toggle-button').checked){
-            this.overlay.setMap(elem.map);
-          }
-        },
-        _overlayErr: function(err) {
-          alert ('Error loading overlay', err);
-        },
-        toggleOverlay: function() {
-          if (!this.$$('paper-toggle-button').checked){
-            this.overlay.setMap(null);
-          } else {
-            this.overlay.setMap(this.$$('google-map').map);
-          }
-        }
-      })
-    })();
-  </script>
+                    //display the overlay image
+                    this.overlay = new google.maps.GroundOverlay(
+                        theImage.url(), imageBounds);
+                    if (this.$$('paper-toggle-button').checked) {
+                        this.overlay.setMap(elem.map);
+                    }
+                },
+                _overlayErr: function(err) {
+                    alert('Error loading overlay', err);
+                },
+                toggleOverlay: function() {
+                    if (!this.$$('paper-toggle-button').checked) {
+                        this.overlay.setMap(null);
+                    } else {
+                        this.overlay.setMap(this.$$('google-map').map);
+                    }
+                }
+            })
+        })();
+    </script>
 </dom-module>

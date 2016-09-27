@@ -1,19 +1,9 @@
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <script src="../../../bower_components/page/page.js"></script>
 
 <dom-module id="parent-element">
-  <style is="custom-style" include="shared-styles"></style>
-  <template>
+    <style is="custom-style" include="shared-styles"></style>
+    <template>
 
     <paper-drawer-panel id="paperDrawerPanel">
       <!-- Drawer Scroll Header Panel -->
@@ -25,7 +15,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </paper-toolbar>
 
         <!-- Drawer Content -->
-
         <paper-menu attr-for-selected="data-route" selected="{{route}}">
           <a data-route="about" href="/" on-click="onDataRouteClick">
             <iron-icon icon="info"></iron-icon>
@@ -37,140 +26,113 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </a>
 
           <h3>&nbsp;&nbsp;Locations</h3>
-          <!--<paper-submenu>-->
-            <!--<paper-item class="menu-trigger">-->
-              <!--<iron-icon icon="view-headline"></iron-icon>-->
-              <!--<span>Mackinac</span>  -->
-            <!--</paper-item>-->
-            <paper-menu class="menu-content sublist" selected="{{buildingIndex}}" data-route="location" href="/">
-              <template  is="dom-repeat" items="{{buildings}}">
-                <paper-item>
-                  <iron-icon icon="home"></iron-icon>
-                  <span>{{item}}</span></paper-item>
-              </template>
-            </paper-menu>
-          <!--</paper-submenu>-->
-        </paper-menu>
-      </paper-scroll-header-panel>
 
-      <!-- Main Area -->
-      <paper-scroll-header-panel main condenses keep-condensed-header>
+          <template  is="dom-repeat" items="{{buildings}}" data-route="location" href="/">
+                <paper-item on-click="onLocationSelected">
+                  <iron-icon icon="home"></iron-icon>
+                  <span>{{item}}</span>
+                </paper-item>
+          </template>
+    </paper-menu>
+    </paper-scroll-header-panel>
+
+    <!-- Main Area -->
+    <paper-scroll-header-panel main condenses keep-condensed-header>
 
         <!-- Main Toolbar -->
         <paper-toolbar id="mainToolbar" class="tall">
-          <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
-          <span class="flex"></span>
+            <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+            <span class="flex"></span>
 
-          <!-- Application name -->
-          <div class="middle middle-container center horizontal layout">
-            <div class="app-name">Passageway</div>
-          </div>
+            <!-- Application name -->
+            <div class="middle middle-container center horizontal layout">
+                <div class="app-name">Passageway</div>
+            </div>
 
-          <!-- Application sub title -->
-          <div class="bottom bottom-container center horizontal layout">
-            <div class="bottom-title app-subhead">{{currentLocation}}</div>
-          </div>
+            <!-- Application sub title -->
+            <div class="bottom bottom-container center horizontal layout">
+                <div class="bottom-title app-subhead">{{currentLocation}}</div>
+            </div>
 
         </paper-toolbar>
 
         <!-- Main Content -->
         <div class="content">
 
+            <iron-pages attr-for-selected="data-route" selected="{{route}}" style="padding-top: 0px;">
 
+                <section data-route="about">
+                    <about-element></about-element>
+                </section>
+                <section data-route="table">
+                    <table-element></table-element>
+                </section>
+                <section data-route="location">
+                    <filter-view></filter-view>
+                    <location-element current-location="[[currentLocation]]"></location-element>
+                </section>
 
-          <iron-pages attr-for-selected="data-route" selected="{{route}}" style="padding-top: 0px;">
-
-            <section data-route="about">
-              <about-element></about-element>
-            </section>
-            <section data-route="table">
-              <table-element></table-element>
-            </section>
-
-            <section data-route = "location">
-              <filter-view></filter-view>
-              <location-element current-location="[[currentLocation]]"></location-element>
-            </section>
-
-
-          </iron-pages>
+            </iron-pages>
         </div>
-      </paper-scroll-header-panel>
+    </paper-scroll-header-panel>
     </paper-drawer-panel>
 
-    <!-- Uncomment next block to enable Service Worker support (1/2) -->
-    <!--
-    <paper-toast id="caching-complete"
-                 duration="6000"
-                 text="Caching complete! This app will work offline.">
-    </paper-toast>
+    </template>
+    <script>
+        (function() {
+            'use strict';
 
-    <platinum-sw-register auto-register
-                          clients-claim
-                          skip-waiting
-                          on-service-worker-installed="displayInstalledToast">
-      <platinum-sw-cache default-cache-strategy="fastest"
-                         cache-config-file="cache-config.json">
-      </platinum-sw-cache>
-    </platinum-sw-register>
-    -->
+            Polymer({
+                is: 'parent-element',
 
-  </template>
-  <script>
-  (function() {
-    'use strict';
+                properties: {
+                    foo: {
+                        type: String,
+                        value: 'parent-element',
+                        notify: true
+                    },
+                    currentLocation: {
+                        type: String
+                    },
+                    buildings: Array,
 
-    Polymer({
-      is: 'parent-element',
+                },
+                ready: function() {
+                    var query = new Parse.Query('Blueprints');
 
-      properties: {
-        foo: {
-          type: String,
-          value: 'parent-element',
-          notify: true
-        },
-        currentLocation: {
-          type: String
-        },
-        buildingIndex: {
-          type: Number,
-          observer: 'indexChange'
-        },
-        buildings: Array,
+                    /* Use Java promises */
+                    query.find().then(
+                        this._dataLoaded.bind(this),
+                        this._dataErr.bind(this)
+                    );
+                },
+                _dataErr: function(err) {
+                    alert('Error loading Parse data ', err);
+                },
+                _dataLoaded: function(results) {
+                    this.buildings = [];
+                    for (var k = 0; k < results.length; k++) {
+                        var sData = results[k];
+                        var desc = sData.get('Description');
+                        this.push('buildings', desc);
+                    }
+                },
+                onLocationSelected: function(event) {
+                  var drawerPanel = document.querySelector('#paperDrawerPanel');
 
-      },
-      indexChange: function(newVal, oldVal) {
-        console.log('indexChange: oldVal: ', oldVal);
-        this.currentLocation = this.buildings[newVal];
-      },
-      ready: function(){
-        var query = new Parse.Query('Blueprints');
-
-        /* Use Java promises */
-        query.find().then(
-          this._dataLoaded.bind(this),
-          this._dataErr.bind(this)
-        );
-      },
-      _dataErr: function(err) {
-        alert ('Error loading Parse data ', err);
-      },
-      _dataLoaded: function (results) {
-        this.buildings = [];
-        for (var k = 0; k < results.length; k++) {
-          var sData = results[k];
-          var desc = sData.get('Description');
-          this.push('buildings', desc);
-        }
-      },
-      onDataRouteClick: function() {
-        var drawerPanel = document.querySelector('#paperDrawerPanel');
-        this.currentLocation = 'Table';
-        if (drawerPanel.narrow) {
-          drawerPanel.closeDrawer();
-        }
-       }
-    });
-  })();
-  </script>
+                  this.currentLocation = event.model.item;
+                  if (drawerPanel.narrow) {
+                      drawerPanel.closeDrawer();
+                  }
+                },
+                onDataRouteClick: function() {
+                    var drawerPanel = document.querySelector('#paperDrawerPanel');
+                    this.currentLocation = 'Table';
+                    if (drawerPanel.narrow) {
+                        drawerPanel.closeDrawer();
+                    }
+                }
+            });
+        })();
+    </script>
 </dom-module>
