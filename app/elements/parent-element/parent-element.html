@@ -26,9 +26,9 @@
           </a>
 
           <h3>&nbsp;&nbsp;Locations</h3>
-
-          <template  is="dom-repeat" items="{{buildings}}" data-route="location" href="/">
-                <paper-item on-click="onLocationSelected">
+            
+          <template is="dom-repeat" items="{{buildings}}">
+                <paper-item on-click="onLocationSelected" data-route="location">
                   <iron-icon icon="home"></iron-icon>
                   <span>{{item}}</span>
                 </paper-item>
