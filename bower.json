@@ -7,7 +7,6 @@
   ],
   "license": "MIT",
   "homepage": "https://github.com/TimJung/Passageway",
-  "private": true,
   "ignore": [
     "**/.*",
     "node_modules",
