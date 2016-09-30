@@ -1,0 +1,41 @@
+#!/bin/bash
+
+username = ""
+
+main() {
+  echo "Initializing Polymer CLI..."
+  init_polymer
+  echo "Installing Firebase"
+  init_firebase
+}
+
+init_polymer() {
+  curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+  sudo apt-get install -y nodejs
+  sudo ln -s /usr/bin/nodejs /usr/bin/node
+  sudo npm install -g bower
+  sudo npm install -g polymer-cli
+}
+
+init_firebase() {
+  sudo npm install -g firebase-tools
+  firebase login
+}
+
+main
+
+
+# Yeah this is for if we go the EOS route
+generate_key() {
+  mkdir -p .ssh
+  if [ ! -f ~/.ssh/id_rsa ]; then
+    ssh-keygen -t rsa -N "" -f id_rsa
+  fi
+  echo "Enter your EOS username: "
+  read username
+  ssh-copy-id "${username}@eos22.cis.gvsu.edu"
+}
+
+add_to_config() {
+    echo -e "\nHostname eos22\n    Hostname eos22.cis.gvsu.edu\n    User ${username}" >> ~/.ssh/config
+}

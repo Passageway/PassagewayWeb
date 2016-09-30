@@ -1,0 +1,9 @@
+#!/bin/bash
+
+main() {
+  polymer build
+  firebase deploy
+  firebase open
+}
+
+main
