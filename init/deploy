@@ -4,6 +4,7 @@ main() {
   polymer build
   firebase deploy
   firebase open
+  # rsync -qr --chmod=uo+r build/unbundled/ dc08:~/public_html/passageway/
 }
 
 main
