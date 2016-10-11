@@ -1,0 +1,37 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="google-map.html">
+
+<dom-module id="my-location">
+    <template>
+      <style include="shared-styles">
+           :host {
+              display: block;
+              padding: 10px;
+          }
+      </style>
+      <my-map></my-map>
+      <!-- heat-data="{{heat}}" location="{{currentLocation}}"></my-map> -->
+      <!-- <my-data></my-data> -->
+    </template>
+    <script>
+        Polymer({
+            is: 'my-location',
+
+            properties: {
+                user: String,
+                isHappy: Boolean,
+                count: {
+                    type: Number,
+                    readOnly: true,
+                    notify: true
+                }
+            },
+
+            ready: function() {
+                this.textContent = 'Hello World, I am a Custom Element!';
+            }
+
+        });
+    </script>
+</dom-module>
