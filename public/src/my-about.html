@@ -1,0 +1,54 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-about">
+    <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      p {
+        padding: 8px;
+      }
+      #cards {
+        @apply(--layout-vertical);
+        @apply(--center-justified);
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      paper-card {
+        margin: 16px;
+      }
+
+      .badge{
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+      }
+
+
+    </style>
+    <div class="cards">
+    <paper-card heading="About This Project">
+      <div class="card-content">
+        Welcome to Passageway, a project developed by four Computer Science
+        students at Grand Valley State University. The project offers a solution for
+        aggregating, displaying, and analyzing foot traffic data within facilities.
+        The project uses Raspberry Pi computers with infrared beam pairs to capture
+        individuals entering or exiting areas within a building. This data is stored
+        in a cloud database and then accessed by a website in an easy-to-follow format.
+      </div>
+    </paper-card>
+  </template>
+    <script>
+        Polymer({
+            is: 'my-about'
+        });
+    </script>
+</dom-module>

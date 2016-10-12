@@ -2,8 +2,10 @@
   "entrypoint": "index.html",
   "shell": "src/my-app.html",
   "fragments": [
-    "src/my-location.html",    
-    "src/my-view404.html"
+    "src/my-location.html",
+    "src/my-view404.html",
+    "src/my-about.html",
+    "src/my-chip-list.html"
   ],
   "sourceGlobs": [
    "src/**/*",
