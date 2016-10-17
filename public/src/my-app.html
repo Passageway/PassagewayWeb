@@ -97,6 +97,7 @@
             attr-for-selected="name"
             fallback-selection="view404"
             role="main">
+          <span>{{data}}</span>
           <my-location name="location"></my-location>
           <my-about name="about"></my-about>
           <my-chip-list name="chip-list"></my-chip-list>
@@ -115,7 +116,15 @@
                     type: String,
                     reflectToAttribute: true,
                     observer: '_pageChanged'
+                },
+                data: {
+                  type: object,
+                  observer: '_onDataReceived'
                 }
+            },
+
+            _onDataReceived: function (newData, oldData){
+              console.log("objects from firebase:", newData);
             },
 
             observers: [
