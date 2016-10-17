@@ -52,17 +52,15 @@
         font-weight: bold;
       }
     </style>
-    
+
     <firebase-app auth-domain="project-8002914138129972242.firebaseapp.com"
         database-url="https://project-8002914138129972242.firebaseio.com"
         api-key="AIzaSyDSYCQVgHLL6VgBkdgtDFu2nv2-1_lohcc">
     </firebase-app>
     <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
     </firebase-auth>
-    
-    <firebase-query
-    path='data'
-    data="{{data}}">
+
+    <firebase-query path='data' data="{{data}}">
     </firebase-query>
 
     <app-location route="{{route}}"></app-location>
@@ -77,10 +75,8 @@
       <app-drawer>
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="view1" href="/view1">View One</a>
-          <a name="view2" href="/view2">View Two</a>
-          <a name="view3" href="/view3">View Three</a>
-          <a name="map" href="/map">Map</a>
+
+          <span>{{data}}</span>
           <a name="location" href="/location">Location</a>
           <a name="chip-list" href="/chip-list">Chip list</a>
           <a name="about" href="/about">About</a>
@@ -135,7 +131,6 @@
                 var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
                 this.importHref(resolvedPageUrl, null, this._showPage404, true);
             },
-
             _showPage404: function() {
                 this.page = 'view404';
             }
