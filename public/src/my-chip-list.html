@@ -1,0 +1,36 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid.html">
+<dom-module id="my-chip-list">
+    <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        margin: 16px;
+      }
+    </style>
+    <h2>Registered Chips</h2>
+
+    <v-grid selection-mode="single">
+      <table>
+        <colgroup>
+          <col header-text="id">
+          <col header-text="name">
+          <col header-text="description">
+        </colgroup>
+        <tbody>
+        <template is="dom-repeat" items="{{devices}}">
+          <tr>
+            <td>{{item.pid}}</td>
+            <td>{{item.name}}</td>
+          </tr>
+        </template>
+    </tbody>
+    </table>
+    </v-grid>
+    </template>
+    <script>
+        Polymer({
+            is: 'my-chip-list'
+        });
+    </script>
+</dom-module>

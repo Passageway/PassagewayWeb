@@ -16,13 +16,12 @@
     "iron-selector": "PolymerElements/iron-selector#^1.0.0",
     "paper-icon-button": "PolymerElements/paper-icon-button#~1.1.0",
     "polymer": "Polymer/polymer#^1.6.0",
-<<<<<<< HEAD
     "paper-material": "PolymerElements/paper-material#^1.0.6",
-    "polymerfire": "firebase/polymerfire#^0.9.7"
-=======
+    "polymerfire": "firebase/polymerfire#^0.9.7",
     "google-chart": "GoogleWebComponents/google-chart#^1.1.1",
-    "google-map": "GoogleWebComponents/google-map#^1.1.13"
->>>>>>> b4b57d126b588f0bd5882f10a91e413b540fd7f4
+    "google-map": "GoogleWebComponents/google-map#^1.1.13",
+    "paper-card": "PolymerElements/paper-card#^1.1.4",
+    "vaadin-core-elements": "^1.1.2"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
