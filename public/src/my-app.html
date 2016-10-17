@@ -52,6 +52,18 @@
         font-weight: bold;
       }
     </style>
+    
+    <firebase-app auth-domain="project-8002914138129972242.firebaseapp.com"
+        database-url="https://project-8002914138129972242.firebaseio.com"
+        api-key="AIzaSyDSYCQVgHLL6VgBkdgtDFu2nv2-1_lohcc">
+    </firebase-app>
+    <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
+    </firebase-auth>
+    
+    <firebase-query
+    path='data'
+    data="{{data}}">
+    </firebase-query>
 
     <app-location route="{{route}}"></app-location>
     <app-route
@@ -65,14 +77,12 @@
       <app-drawer>
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-<<<<<<< HEAD
           <a name="view1" href="/view1">View One</a>
           <a name="view2" href="/view2">View Two</a>
           <a name="view3" href="/view3">View Three</a>
           <a name="map" href="/map">Map</a>
-=======
           <a name="location" href="/location">Location</a>
->>>>>>> b4b57d126b588f0bd5882f10a91e413b540fd7f4
+
         </iron-selector>
       </app-drawer>
 
