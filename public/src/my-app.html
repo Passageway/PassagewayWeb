@@ -75,9 +75,10 @@
       <app-drawer>
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-
-          <span>{{data}}</span>
           <a name="location" href="/location">Location</a>
+          <!-- <template is="dom-repeat" items="{{employees}}" as="employee">
+
+          </template> -->
           <a name="chip-list" href="/chip-list">Chip list</a>
           <a name="about" href="/about">About</a>
         </iron-selector>
@@ -97,7 +98,6 @@
             attr-for-selected="name"
             fallback-selection="view404"
             role="main">
-          <span>{{data}}</span>
           <my-location name="location"></my-location>
           <my-about name="about"></my-about>
           <my-chip-list name="chip-list"></my-chip-list>
@@ -110,16 +110,17 @@
     <script>
         Polymer({
             is: 'my-app',
-
+            ready: function() {
+                    this.employees = [
+                        {first: 'Bob', last: 'Smith'},
+                        {first: 'Sally', last: 'Johnson'}
+                    ];
+                  },
             properties: {
                 page: {
                     type: String,
                     reflectToAttribute: true,
                     observer: '_pageChanged'
-                },
-                data: {
-                  type: object,
-                  observer: '_onDataReceived'
                 }
             },
 
