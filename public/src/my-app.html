@@ -60,7 +60,9 @@
     <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
     </firebase-auth>
 
-    <firebase-query path='data' data="{{data}}">
+    <firebase-query
+      path='units'
+      data="{{units}}">
     </firebase-query>
 
     <app-location route="{{route}}"></app-location>
@@ -76,8 +78,9 @@
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="location" href="/location">Location</a>
-          <!-- <template is="dom-repeat" items="{{employees}}" as="employee">
-
+          <span>{{data}}</span>
+          <!-- <template is="dom-repeat" items="{{data}}" as="item">
+            <span>{{item}}</span>
           </template> -->
           <a name="chip-list" href="/chip-list">Chip list</a>
           <a name="about" href="/about">About</a>
@@ -110,18 +113,21 @@
     <script>
         Polymer({
             is: 'my-app',
-            ready: function() {
-                    this.employees = [
-                        {first: 'Bob', last: 'Smith'},
-                        {first: 'Sally', last: 'Johnson'}
-                    ];
-                  },
+
             properties: {
                 page: {
                     type: String,
                     reflectToAttribute: true,
                     observer: '_pageChanged'
+                },
+                units: {
+                  type: Array,
+                  notify: true
                 }
+            },
+
+            handleError: function() {
+                console.log("fuck it we'll do it live");
             },
 
             _onDataReceived: function (newData, oldData){
@@ -129,8 +135,14 @@
             },
 
             observers: [
-                '_routePageChanged(routeData.page)'
+                '_routePageChanged(routeData.page)',
+                '_unitsChanged(units)'
             ],
+
+            _unitsChanged: function(units) {
+              console.log('whatever man');
+              console.log('items: ', units);
+            },
 
             _routePageChanged: function(page) {
                 this.page = page || 'about';
@@ -141,6 +153,7 @@
                 var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
                 this.importHref(resolvedPageUrl, null, this._showPage404, true);
             },
+
             _showPage404: function() {
                 this.page = 'view404';
             }
