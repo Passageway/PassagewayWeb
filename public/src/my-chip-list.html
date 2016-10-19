@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../bower_components/google-chart/google-chart.html">
 <dom-module id="my-chip-list">
     <template>
     <style include="shared-styles">
@@ -7,8 +8,20 @@
         display: block;
         margin: 16px;
       }
+
+      google-chart {
+        height: 300px;
+        width: 50em;
+      }
     </style>
     <h2>Registered Chips</h2>
+
+    <google-chart
+      type="stepped-area"
+      options='{"title": "Days in a month"}'
+      cols='[{"label": "Month", "type": "string"},{"label": "Days", "type": "number"}]'
+      rows='[["Jan", 31],["Feb", 28],["Mar", 31],["Apr", 30],["May", 31],["Jun", 30]]'>
+    </google-chart>
 
     <v-grid selection-mode="single">
       <table>
