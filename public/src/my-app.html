@@ -131,7 +131,16 @@
                 unitsRef.on('value', function(data) {
                     this.units = toArray(data.val());
                 }.bind(this));
+                this._showUnit();
             },
+
+            _showUnit: function(){
+              var ref = firebase.database().ref('data');
+              ref.orderByChild("cid").equalTo(224823538122799).on("child_added",
+            function (snapshot){
+              console.log(snapshot.key);
+            });
+          },
 
             handleError: function() {},
 
