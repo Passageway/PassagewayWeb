@@ -29,28 +29,90 @@
           top: 10px;
           width: auto;
           height: auto;
-        }
-    </style>
-      <google-map zoom="20"
-        api-key="AIzaSyAVUqR5YdD6osagKIQO2kYrw9mAjS9xaA0"
-      >
+        } </style>
+      <google-map
+        zoom="20"
+        on-google-map-ready="_ApiLoaded"
+        latitude="42.966637" longitude="-85.887161"
+        api-key="AIzaSyAVUqR5YdD6osagKIQO2kYrw9mAjS9xaA0">
       </google-map>
-      <!-- <paper-material>
-        <paper-material class="toggle">
-          <paper-toggle-button checked on-change="toggleOverlay"><span style="font-size: small;">Blueprint</span>
-          </paper-toggle-button>
-        </paper-material>
-      </paper-material> -->
     </template>
     <script>
         Polymer({
-            is: 'my-map'
+            is: 'my-map',
+
+            properties: {
+                heatData: {
+                    type: Array,
+                    observer: '_heatDataChanged'
+                }
+            },
+
+            ready: function() {
+                this._retrieveUnitsForBuilding("Mackinac");
+            },
+
+            _retrieveUnitsForBuilding: function(building) {
+                var unitsRef = firebase.database().ref('units');
+                unitsRef.orderByChild("building").equalTo(building)
+                    .on('value', function(data) {
+                        buildingUnits = toArray(data.val());
+                        buildingUnits.forEach(function(unit) {
+                            unit.count = 0;
+                        });
+                        this._retrieveTraffic(buildingUnits);
+                    }.bind(this));
+            },
+
+            _retrieveTraffic: function(units) {
+                var trafficRef = firebase.database().ref('data');
+                trafficRef.on('value', function(data) {
+                    trafficEvents = toArray(data.val());
+                    trafficEvents.forEach(function(event) {
+                        units.forEach(function(unit) {
+                            var eventValue = event.value;
+                            if (unit.value.cid === eventValue.cid) {
+                                unit.count += eventValue.entry + eventValue.exit;
+                            }
+                        });
+                    });
+                    console.log(this.heatData);
+                }.bind(this));
+            },
+
+            _heatDataChanged: function(newVal, oldVal) {
+                if (this.heatData) {
+                    console.log('got here');
+                    for (var k = 0; k < this.heatData.length; k++) {
+                        sensorData.push(new google.maps.LatLng(
+                            this.heatData[k].lat, this.heatData[k].lon));
+                    }
+                }
+            },
+
+            _ApiLoaded: function(e) {
+                var elem = this.$$('google-map');
+                var sensorData = [];
+                if (this.heatData) {
+                    for (var k = 0; k < this.heatData.length; k++) {
+                        sensorData.push(new google.maps.LatLng(
+                            this.heatData[k].lat, this.heatData[k].lon));
+                    }
+                }
+
+                var hmap = new google.maps.visualization.HeatmapLayer();
+                hmap.setData(sensorData);
+                hmap.setMap(elem.map);
+            }
         });
-        var map = document.querySelector('google-map');
-        map.latitude = 37.77493;
-        map.longitude = -122.41942;
-        map.addEventListener('google-map-ready', function(e) {
-            alert('Map loaded!');
-        });
+
+        function toArray(obj) {
+            return Object.keys(obj).map(function(key) {
+                return {
+                    name: key,
+                    value: obj[key]
+                };
+            });
+        }
     </script>
 </dom-module>
