@@ -72,7 +72,7 @@
           <a name="about" href="/about">About</a>
           <a name="Mackinac" href="/location/Mackinac">MAK C</a>
           <template id='unit-repeat' is="dom-repeat" items="[[units]]" as="unit">
-            <a name="{{unit.value.name}}" class="sublist" href="/location/Mackinac/{{unit.value.name}}">{{unit.value.name}}</a>
+            <a name="{{unit..name}}" class="sublist" href="/location/Mackinac/{{unit.value.name}}">{{unit.value.name}}</a>
           </template>
     </iron-selector>
     </app-drawer>
@@ -87,7 +87,7 @@
         </app-header>
 
         <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-            <my-location name="location"></my-location>
+            <my-location units="{{units}}" name="location"></my-location>
             <my-about name="about"></my-about>
             <my-chip-list name="chip-list"></my-chip-list>
             <my-view404 name="view404"></my-view404>
@@ -108,6 +108,7 @@
                 },
                 units: {
                     type: Array,
+                    notify: true,
                     observer: '_unitsChanged'
                 }
             },
@@ -131,7 +132,6 @@
                 unitsRef.on('value', function(data) {
                     this.units = toArray(data.val());
                 }.bind(this));
-                this._showUnit();
             },
 
             _showUnit: function() {

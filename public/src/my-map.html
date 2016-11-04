@@ -32,7 +32,8 @@
         } </style>
       <google-map
         zoom="20"
-        on-google-map-ready="_ApiLoaded"
+        id="google-map"
+        on-google-map-ready="_garbage"
         latitude="42.966637" longitude="-85.887161"
         api-key="AIzaSyAVUqR5YdD6osagKIQO2kYrw9mAjS9xaA0">
       </google-map>
@@ -44,65 +45,94 @@
             properties: {
                 heatData: {
                     type: Array,
+                    notify: true,
                     observer: '_heatDataChanged'
+                },
+                units: {
+                    type: Array,
+                    notify: true,
+                    observer: '_unitsChanged'
                 }
             },
 
-            ready: function() {
+            _unitsChanged: function(newData, oldData) {
                 this._retrieveUnitsForBuilding("Mackinac");
             },
 
-            _retrieveUnitsForBuilding: function(building) {
-                var unitsRef = firebase.database().ref('units');
-                unitsRef.orderByChild("building").equalTo(building)
-                    .on('value', function(data) {
-                        buildingUnits = toArray(data.val());
-                        buildingUnits.forEach(function(unit) {
-                            unit.count = 0;
-                        });
-                        this._retrieveTraffic(buildingUnits);
-                    }.bind(this));
+            _retrieveUnitsForBuilding: function() {
+                this.units.forEach(function(unit) {
+                    unit.weight = 0;
+                });
+                this._retrieveTraffic(this.units);
             },
 
             _retrieveTraffic: function(units) {
                 var trafficRef = firebase.database().ref('data');
-                trafficRef.on('value', function(data) {
-                    trafficEvents = toArray(data.val());
-                    trafficEvents.forEach(function(event) {
-                        units.forEach(function(unit) {
-                            var eventValue = event.value;
-                            if (unit.value.cid === eventValue.cid) {
-                                unit.count += eventValue.entry + eventValue.exit;
-                            }
-                        });
+                var heatArray = [];
+
+                trafficRef.on('value', function(deviceMap) {
+                  var devices = toArray(deviceMap);
+                  devices.forEach(function(device) {
+                    units.forEach(function(unit) {
+                      if (key(unit) === key(device)) {
+                          console.log("unit:" + key(unit));
+                          console.log("device:" + key(device));
+                        // var events = toArray(device);
+                        //     unit.weight += .entry + .exit;
+//                        heatArray.push(newHeatPoint(unit.value.latitude, unit.value.longitude, unit.weight));
+                      }
                     });
-                    console.log(this.heatData);
-                }.bind(this));
+                  });
+                })(heatArray);
+                this.heatData = heatArray;
             },
+
 
             _heatDataChanged: function(newVal, oldVal) {
                 if (this.heatData) {
-                    console.log('got here');
+                    console.log(this.heatData);
+                    var sensorData = [];
                     for (var k = 0; k < this.heatData.length; k++) {
                         sensorData.push(new google.maps.LatLng(
                             this.heatData[k].lat, this.heatData[k].lon));
                     }
+                    var hmap = new google.maps.visualization.HeatmapLayer();
+                    hmap.setData(sensorData);
+                    // hmap.setMap(elem.map);
                 }
             },
 
-            _ApiLoaded: function(e) {
-                var elem = this.$$('google-map');
-                var sensorData = [];
-                if (this.heatData) {
-                    for (var k = 0; k < this.heatData.length; k++) {
-                        sensorData.push(new google.maps.LatLng(
-                            this.heatData[k].lat, this.heatData[k].lon));
-                    }
-                }
+            _garbage: function() {
+              var heatMapData = [
+                {location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
+                new google.maps.LatLng(37.782, -122.445),
+                {location: new google.maps.LatLng(37.782, -122.443), weight: 2},
+                {location: new google.maps.LatLng(37.782, -122.441), weight: 3},
+                {location: new google.maps.LatLng(37.782, -122.439), weight: 2},
+                new google.maps.LatLng(37.782, -122.437),
+                {location: new google.maps.LatLng(37.782, -122.435), weight: 0.5},
 
-                var hmap = new google.maps.visualization.HeatmapLayer();
-                hmap.setData(sensorData);
-                hmap.setMap(elem.map);
+                {location: new google.maps.LatLng(37.785, -122.447), weight: 3},
+                {location: new google.maps.LatLng(37.785, -122.445), weight: 2},
+                new google.maps.LatLng(37.785, -122.443),
+                {location: new google.maps.LatLng(37.785, -122.441), weight: 0.5},
+                new google.maps.LatLng(37.785, -122.439),
+                {location: new google.maps.LatLng(37.785, -122.437), weight: 2},
+                {location: new google.maps.LatLng(37.785, -122.435), weight: 3}
+              ];
+
+              var sanFrancisco = new google.maps.LatLng(37.774546, -122.433523);
+
+              map = new google.maps.Map(document.getElementById('google-map'), {
+                center: sanFrancisco,
+                zoom: 13,
+                mapTypeId: 'satellite'
+              });
+
+              var heatmap = new google.maps.visualization.HeatmapLayer({
+                data: heatMapData
+              });
+              heatmap.setMap(map);
             }
         });
 
@@ -113,6 +143,18 @@
                     value: obj[key]
                 };
             });
+        }
+
+        function key(object) {
+          return Object.keys(object)[0];
+        }
+
+        function newHeatPoint(pLat, pLon, pWeight) {
+            return {
+                lat: pLat,
+                lon: pLon,
+                weight: pWeight
+            };
         }
     </script>
 </dom-module>
