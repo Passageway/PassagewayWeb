@@ -11,17 +11,43 @@
               padding: 10px;
           }
       </style>
-      <my-map units="{{units}}"></my-map>
+      <my-map heat-data="{{heatData}}"></my-map>
     </template>
     <script>
         Polymer({
             is: 'my-location',
             properties: {
-                units: {
-                  type: Array,
-                  notify: true
+                unitData: {
+                    type: Array,
+                    observer: '_unitDataChanged'
+                },
+                heatData: {
+                    type: Array,
+                    notify: true
+                }
+            },
+            _unitDataChanged: function (){
+                this._addToHeatData();    
+            },
+            _addToHeatData: function (){
+                var heatArray = [];
+                this.unitData.forEach(function (unit){
+                    var weight = 0;
+                    Object.values(unit.value.record).forEach(function (record){
+                        weight += (record.entry + record.exit);
+                    }.bind(this));
+                    heatArray.push(newHeatPoint(unit.value.lat,unit.value.lon,weight));
+                }.bind(this));
+                console.log(heatArray);
+                this.heatData = heatArray;
             }
-          }
         });
+        function newHeatPoint(pLat, pLon, pWeight) {
+            return {
+                lat: pLat,
+                lon: pLon,
+                weight: pWeight
+            };
+        }
     </script>
 </dom-module>

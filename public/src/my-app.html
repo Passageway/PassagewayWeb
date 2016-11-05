@@ -70,7 +70,7 @@
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="about" href="/about">About</a>
-          <a name="Mackinac" href="/location/Mackinac">MAK C</a>
+          <a name="Mackinac" href="/location/Mackinac">Mackinac</a>
           <template id='unit-repeat' is="dom-repeat" items="[[units]]" as="unit">
             <a name="{{unit..name}}" class="sublist" href="/location/Mackinac/{{unit.value.name}}">{{unit.value.name}}</a>
           </template>
@@ -87,7 +87,7 @@
         </app-header>
 
         <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-            <my-location units="{{units}}" name="location"></my-location>
+            <my-location unit-data="{{unitData}}" name="location"></my-location>
             <my-about name="about"></my-about>
             <my-chip-list name="chip-list"></my-chip-list>
             <my-view404 name="view404"></my-view404>
@@ -110,6 +110,10 @@
                     type: Array,
                     notify: true,
                     observer: '_unitsChanged'
+                },
+                unitData: {
+                    type: Array,
+                    notify: true
                 }
             },
 
@@ -133,32 +137,36 @@
                     this.units = toArray(data.val());
                 }.bind(this));
             },
-
-            _showUnit: function() {
-                var ref = firebase.database().ref('data');
-                ref.orderByChild("cid").equalTo(224823538122799).on("child_added",
-                    function(snapshot) {
-                        // console.log(snapshot.key);
-                    });
+            _addToUnitData: function() {
+                var dataRef = firebase.database().ref('data');
+                var dataArray;
+                dataRef.on('value', function(data) {
+                    //this.allLocationData = toArray(data.val());
+                    var unitRecordMap = toArray(data.val());
+                    Object.values(unitRecordMap).forEach(function (unitOuter){
+                        this.units.forEach(function (unitInner){
+                            if(unitOuter.name == unitInner.name){
+                                unitInner.value.record = unitOuter.value;
+                            }
+                        }.bind(this));
+                    }.bind(this));
+                    //console.log(this.units);
+                    this.unitData = this.units;
+                }.bind(this));
             },
-
-            handleError: function() {},
-
-            _onDataReceived: function(newData, oldData) {
-                console.log("objects from firebase:", newData);
+                
+            _unitsChanged: function() {
+                this._addToUnitData();
             },
-
+            
             observers: [
                 '_routePageChanged(routeData.page)',
-                '_unitsChanged(units)'
             ],
-
-            _unitsChanged: function(newData, oldData) {},
-
+            
             _routePageChanged: function(page) {
                 this.page = page || 'about';
             },
-
+            
             _pageChanged: function(page) {
                 // Load page import on demand. Show 404 page if fails
                 var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');

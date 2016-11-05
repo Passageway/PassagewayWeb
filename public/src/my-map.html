@@ -33,7 +33,7 @@
       <google-map
         zoom="20"
         id="google-map"
-        on-google-map-ready="_garbage"
+        on-google-map-ready="_MapLoaded"
         latitude="42.966637" longitude="-85.887161"
         api-key="AIzaSyAVUqR5YdD6osagKIQO2kYrw9mAjS9xaA0">
       </google-map>
@@ -48,91 +48,26 @@
                     notify: true,
                     observer: '_heatDataChanged'
                 },
-                units: {
-                    type: Array,
-                    notify: true,
-                    observer: '_unitsChanged'
-                }
+                hmap: Object
             },
 
-            _unitsChanged: function(newData, oldData) {
-                this._retrieveUnitsForBuilding("Mackinac");
-            },
-
-            _retrieveUnitsForBuilding: function() {
-                this.units.forEach(function(unit) {
-                    unit.weight = 0;
-                });
-                this._retrieveTraffic(this.units);
-            },
-
-            _retrieveTraffic: function(units) {
-                var trafficRef = firebase.database().ref('data');
-                var heatArray = [];
-
-                trafficRef.on('value', function(deviceMap) {
-                  var devices = toArray(deviceMap);
-                  devices.forEach(function(device) {
-                    units.forEach(function(unit) {
-                      if (key(unit) === key(device)) {
-                          console.log("unit:" + key(unit));
-                          console.log("device:" + key(device));
-                        // var events = toArray(device);
-                        //     unit.weight += .entry + .exit;
-//                        heatArray.push(newHeatPoint(unit.value.latitude, unit.value.longitude, unit.weight));
-                      }
+            _heatDataChanged: function() {
+                if (this.hmap != undefined && this.heatData != undefined){
+                    var mapData = [];
+                    this.heatData.forEach(function (heatPoint){
+                        mapData.push({location: new google.maps.LatLng(heatPoint.lat, heatPoint.lon),weight:heatPoint.weight});
                     });
-                  });
-                })(heatArray);
-                this.heatData = heatArray;
-            },
-
-
-            _heatDataChanged: function(newVal, oldVal) {
-                if (this.heatData) {
-                    console.log(this.heatData);
-                    var sensorData = [];
-                    for (var k = 0; k < this.heatData.length; k++) {
-                        sensorData.push(new google.maps.LatLng(
-                            this.heatData[k].lat, this.heatData[k].lon));
-                    }
-                    var hmap = new google.maps.visualization.HeatmapLayer();
-                    hmap.setData(sensorData);
-                    // hmap.setMap(elem.map);
+                    var elem = this.$$('google-map');
+                    this.hmap.setData(mapData);
+                    this.hmap.setMap(elem.map);
                 }
             },
 
-            _garbage: function() {
-              var heatMapData = [
-                {location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
-                new google.maps.LatLng(37.782, -122.445),
-                {location: new google.maps.LatLng(37.782, -122.443), weight: 2},
-                {location: new google.maps.LatLng(37.782, -122.441), weight: 3},
-                {location: new google.maps.LatLng(37.782, -122.439), weight: 2},
-                new google.maps.LatLng(37.782, -122.437),
-                {location: new google.maps.LatLng(37.782, -122.435), weight: 0.5},
-
-                {location: new google.maps.LatLng(37.785, -122.447), weight: 3},
-                {location: new google.maps.LatLng(37.785, -122.445), weight: 2},
-                new google.maps.LatLng(37.785, -122.443),
-                {location: new google.maps.LatLng(37.785, -122.441), weight: 0.5},
-                new google.maps.LatLng(37.785, -122.439),
-                {location: new google.maps.LatLng(37.785, -122.437), weight: 2},
-                {location: new google.maps.LatLng(37.785, -122.435), weight: 3}
-              ];
-
-              var sanFrancisco = new google.maps.LatLng(37.774546, -122.433523);
-
-              map = new google.maps.Map(document.getElementById('google-map'), {
-                center: sanFrancisco,
-                zoom: 13,
-                mapTypeId: 'satellite'
-              });
-
-              var heatmap = new google.maps.visualization.HeatmapLayer({
-                data: heatMapData
-              });
-              heatmap.setMap(map);
+            _MapLoaded: function() {
+                this.hmap = new google.maps.visualization.HeatmapLayer();
+                this.hmap.set('radius', this.hmap.get('radius') ? null : 25);
+                this.hmap.set('dissipating', true);
+                this._heatDataChanged();
             }
         });
 
@@ -149,12 +84,6 @@
           return Object.keys(object)[0];
         }
 
-        function newHeatPoint(pLat, pLon, pWeight) {
-            return {
-                lat: pLat,
-                lon: pLon,
-                weight: pWeight
-            };
-        }
+
     </script>
 </dom-module>
