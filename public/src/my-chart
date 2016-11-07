@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="import" href="/scripts/components/google-chart/google-chart.html">
+</head>
+<body>
+    <section data-route="dashboard">
+        <h2 class="page-title">Data Dashboard</h2>
+        <p>This is the dashboard section</p>
+        <p>This is a 'google-chart' object:</p>
+        <google-chart type='pie' options='{"title": "Distribution of days in 2001Q1"}' rows='[["Jan", 31], ["Feb", 28], ["Mar", 31]]' cols='[{"label":"Month", "type":"string"}, {"label":"Days", "type":"number"}]'></google-chart>
+
+        <p>You can get more info here:</p>
+        <a href="https://elements.polymer-project.org/elements/google-chart">https://elements.polymer-project.org/elements/google-chart</a>
+    </section>
+</body>
+</html>
