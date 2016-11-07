@@ -72,7 +72,7 @@
           <a name="about" href="/about">About</a>
           <a name="Mackinac" href="/location/Mackinac">Mackinac</a>
           <template id='unit-repeat' is="dom-repeat" items="[[units]]" as="unit">
-            <a name="{{unit.name}}" class="sublist" href="/unit/{{unit.name}}">{{unit.value.name}}</a>
+            <a name="{{unit.name}}" class="sublist" href="/unit/{{unit.name}}" on-click="_setUnit">{{unit.value.name}}</a>
           </template>
     </iron-selector>
     </app-drawer>
@@ -131,15 +131,19 @@
                 );
             },
             _retrieveInitData: function() {
-                this._retrieveBlueprint();
                 var unitsRef = firebase.database().ref('units');
                 unitsRef.on('value', function(data) {
                     this.units = toArray(data.val());
                 }.bind(this));
             },
-            _retrieveBlueprint: function() {
 
+            _setUnit: function() {
+              var pathname = window.location.pathname;
+              var cid = pathname.substring(pathname.lastIndexOf('/') + 1);
+              console.log(cid);
+              // this.currentUnit =
             },
+
             _addToUnitData: function() {
                 var dataRef = firebase.database().ref('data');
                 var dataArray;
