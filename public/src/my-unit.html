@@ -1,0 +1,45 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<!-- <link rel="import" href="shared-styles.html"> -->
+<link rel="import" href="my-icons.html">
+<script src="https://www.gstatic.com/firebasejs/3.5.0/firebase.js"></script>
+
+<dom-module id="my-unit">
+    <template>
+    <style include="shared-styles">
+         :host {
+            display: block;
+            padding: 10px;
+        }
+    </style>
+    <h2>hello</h2>
+    <!-- <my-chart></my-chart> -->
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-unit',
+
+            properties: {
+                page: {
+                    type: String,
+                    reflectToAttribute: true,
+                    observer: '_pageChanged'
+                },
+            },
+
+            ready: function() {
+
+            },
+
+        });
+
+        function toArray(obj) {
+            return Object.keys(obj).map(function(key) {
+                return {
+                    name: key,
+                    value: obj[key]
+                };
+            });
+        }
+    </script>
+</dom-module>

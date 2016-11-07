@@ -52,7 +52,7 @@
             },
 
             _heatDataChanged: function() {
-                if (this.hmap != undefined && this.heatData != undefined){
+                if (this.hmap != undefined && this.heatData != undefined) {
                     var mapData = [];
                     this.heatData.forEach(function (heatPoint){
                         mapData.push({location: new google.maps.LatLng(heatPoint.lat, heatPoint.lon),weight:heatPoint.weight});
@@ -67,7 +67,7 @@
                 this.hmap.set('radius', this.hmap.get('radius') ? null : 25);
                 this.hmap.set('dissipating', true);
                 this._heatDataChanged();
-                
+
                 //add Blueprint
                 var storage = firebase.storage();
                 var pathRef = storage.ref('Mackinac1.png')
