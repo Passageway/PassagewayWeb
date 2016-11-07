@@ -33,8 +33,9 @@
                 var heatArray = [];
                 this.unitData.forEach(function (unit){
                     var weight = 0;
-                    Object.values(unit.value.record).forEach(function (record){
-                        weight += (record.entry + record.exit);
+                    var records = toArray(unit.value.record);
+                    records.forEach(function (record){
+                        weight += (record.value.entry + record.value.exit);
                     }.bind(this));
                     heatArray.push(newHeatPoint(unit.value.lat,unit.value.lon,weight));
                 }.bind(this));
@@ -49,5 +50,14 @@
                 weight: pWeight
             };
         }
+        function toArray(obj) {
+            return Object.keys(obj).map(function(key) {
+                return {
+                    name: key,
+                    value: obj[key]
+                };
+            });
+        }
+        
     </script>
 </dom-module>

@@ -146,7 +146,7 @@
                 dataRef.on('value', function(data) {
                     //this.allLocationData = toArray(data.val());
                     var unitRecordMap = toArray(data.val());
-                    Object.values(unitRecordMap).forEach(function (unitOuter){
+                    unitRecordMap.forEach(function (unitOuter){
                         this.units.forEach(function (unitInner){
                             if(unitOuter.name == unitInner.name){
                                 unitInner.value.record = unitOuter.value;
