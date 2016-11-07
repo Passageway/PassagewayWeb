@@ -62,12 +62,34 @@
                     this.hmap.setMap(elem.map);
                 }
             },
-
             _MapLoaded: function() {
                 this.hmap = new google.maps.visualization.HeatmapLayer();
                 this.hmap.set('radius', this.hmap.get('radius') ? null : 25);
                 this.hmap.set('dissipating', true);
                 this._heatDataChanged();
+                
+                //add Blueprint
+                var storage = firebase.storage();
+                var pathRef = storage.ref('Mackinac1.png')
+                pathRef.getDownloadURL().then(function(url) {
+                    // Get the download URL for 'images/stars.jpg'
+                    // This can be inserted into an <img> tag
+                    // This can also be downloaded directly
+                   this._addBlueprint(url);
+                }.bind(this)).catch(function(error) {
+                    console.log(error);
+                });
+            },
+            _addBlueprint: function(url) {
+                var imageBounds = {
+                    north: 42.967422,
+                    south: 42.965963,
+                    east: -85.886085,
+                    west: -85.887585
+                };
+                var elem = this.$$('google-map');
+                overlay = new google.maps.GroundOverlay(url,imageBounds);
+                overlay.setMap(elem.map)
             }
         });
 

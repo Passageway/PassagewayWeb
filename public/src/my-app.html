@@ -130,12 +130,15 @@
                     this._retrieveInitData()
                 );
             },
-
             _retrieveInitData: function() {
+                this._retrieveBlueprint();
                 var unitsRef = firebase.database().ref('units');
                 unitsRef.on('value', function(data) {
                     this.units = toArray(data.val());
                 }.bind(this));
+            },
+            _retrieveBlueprint: function() {
+                
             },
             _addToUnitData: function() {
                 var dataRef = firebase.database().ref('data');
@@ -150,7 +153,7 @@
                             }
                         }.bind(this));
                     }.bind(this));
-                    //console.log(this.units);
+                    console.log(this.units);
                     this.unitData = this.units;
                 }.bind(this));
             },
