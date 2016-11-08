@@ -72,7 +72,7 @@
           <a name="about" href="/about">About</a>
           <a name="Mackinac" href="/location/Mackinac">Mackinac</a>
           <template id='unit-repeat' is="dom-repeat" items="[[units]]" as="unit">
-            <a name="{{unit.name}}" class="sublist" href="/unit/{{unit.name}}" on-click="_setUnit">{{unit.value.name}}</a>
+            <a id="{{unit.name}}"name="{{unit.name}}" class="sublist" href="/unit/{{unit.name}}" on-click="_setUnit">{{unit.value.name}}</a>
           </template>
     </iron-selector>
     </app-drawer>
@@ -137,10 +137,11 @@
                 }.bind(this));
             },
 
-            _setUnit: function() {
-              var pathname = window.location.pathname;
-              var cid = pathname.substring(pathname.lastIndexOf('/') + 1);
-              console.log(cid);
+            _setUnit: function(e) {
+                //console.log(e.target);
+              //var pathname = window.location.pathname;
+              //var cid = pathname.substring(pathname.lastIndexOf('/') + 1);
+              console.log(e.target.id);
               // this.currentUnit =
             },
 
