@@ -10,7 +10,7 @@
             padding: 10px;
         }
     </style>
-    <h2>hello</h2>
+    <h2 id="title"></h2>
     </template>
 
     <script>
@@ -23,12 +23,15 @@
                     reflectToAttribute: true,
                     observer: '_pageChanged'
                 },
+                unit: {
+                    type: Object,
+                    observer: '_unitChanged'
+                },
             },
-
-            ready: function() {
-
-            },
-
+            _unitChanged: function (){
+                console.log(this.unit);
+                this.$.title.innerHTML = this.unit.value.name;
+            }
         });
 
         function toArray(obj) {

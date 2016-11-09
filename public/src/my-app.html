@@ -89,7 +89,7 @@
         <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
             <my-location unit-data="{{unitData}}" name="location"></my-location>
             <my-about name="about"></my-about>
-            <my-unit name="unit"></my-unit>
+            <my-unit unit={{currentUnit}} name="unit"></my-unit>
             <my-view404 name="view404"></my-view404>
         </iron-pages>
     </app-header-layout>
@@ -138,11 +138,13 @@
             },
 
             _setUnit: function(e) {
-                //console.log(e.target);
-              //var pathname = window.location.pathname;
-              //var cid = pathname.substring(pathname.lastIndexOf('/') + 1);
-              console.log(e.target.id);
-              // this.currentUnit =
+                //console.log(e.target.id);
+                this.units.forEach(function (unit){
+                    if(unit.name == e.target.id){
+                        this.currentUnit = unit;
+                    }                   
+                }.bind(this));
+              
             },
 
             _addToUnitData: function() {
