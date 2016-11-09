@@ -126,9 +126,9 @@
                     messagingSenderId: "894129309633"
                 };
                 firebase.initializeApp(config);
-                firebase.auth().signInAnonymously().then(
-                    this._retrieveInitData()
-                );
+                this._retrieveInitData();
+                // firebase.auth().signInAnonymously().then(
+                // );
             },
             _retrieveInitData: function() {
                 var unitsRef = firebase.database().ref('units');
@@ -139,12 +139,12 @@
 
             _setUnit: function(e) {
                 //console.log(e.target.id);
-                this.units.forEach(function (unit){
-                    if(unit.name == e.target.id){
+                this.units.forEach(function(unit) {
+                    if (unit.name == e.target.id) {
                         this.currentUnit = unit;
-                    }                   
+                    }
                 }.bind(this));
-              
+
             },
 
             _addToUnitData: function() {
@@ -153,9 +153,9 @@
                 dataRef.on('value', function(data) {
                     //this.allLocationData = toArray(data.val());
                     var unitRecordMap = toArray(data.val());
-                    unitRecordMap.forEach(function (unitOuter){
-                        this.units.forEach(function (unitInner){
-                            if(unitOuter.name == unitInner.name){
+                    unitRecordMap.forEach(function(unitOuter) {
+                        this.units.forEach(function(unitInner) {
+                            if (unitOuter.name == unitInner.name) {
                                 unitInner.value.record = unitOuter.value;
                             }
                         }.bind(this));
