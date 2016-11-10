@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
@@ -11,6 +12,8 @@
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
+<link rel="import" href="time-filter.html">
+
 <script src="https://www.gstatic.com/firebasejs/3.5.0/firebase.js"></script>
 
 <dom-module id="my-app">
@@ -85,6 +88,7 @@
                 <div main-title>Passageway</div>
             </app-toolbar>
         </app-header>
+        <time-filter></time-filter>
 
         <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
             <my-location unit-data="{{unitData}}" name="location"></my-location>
