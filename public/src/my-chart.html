@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/google-chart/google-chart.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-icons.html">
+
+<dom-module id="my-chart">
+    <template>
+    <style include="shared-styles">
+         :host {
+            display: block;
+            padding: 10px;
+        }
+        google-chart {
+          width: 90%;
+          height: 60vh;
+        }
+    </style>
+    <google-chart
+      type="line"
+      options='{"hAxis": { "format": "M/d" }}'></google-chart>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-chart',
+
+            properties: {
+                chartData: {
+                    type: Array,
+                    observer: '_chartDataChanged'
+                },
+            },
+
+            _chartDataChanged: function() {
+                var googleChart = this.$$('google-chart');
+                googleChart.data = this.chartData;
+            }
+        });
+    </script>
+</dom-module>

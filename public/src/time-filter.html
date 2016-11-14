@@ -1,19 +1,19 @@
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<!DOCTYPE html>
+<link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
-<link rel="import" href="../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../bower_components/paper-material/paper-material.html">
-<link rel="import" href="../bower_components/paper-date-picker/paper-date-picker.html">
 <link rel="import" href="../bower_components/paper-time-picker/paper-time-picker.html">
+<link rel="import" href="../bower_components/paper-date-picker/paper-date-picker.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
 
-<dom-module id="filter-view">
-    <template>
+<dom-module id="time-filter">
+  <template>
     <style>
       .header {
           font-family: 'Roboto Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
           font-size: large;
           color: #3262ba;
-          padding-top: 8px;
           padding-bottom: 8px;
       }
       paper-fab.applyFilter{
@@ -68,6 +68,7 @@
       <div class="layout horizontal wrap">
       <paper-input class="date-time" label="Start Date" placeholder="none" on-click="toggleStartDate"></paper-input>
       <paper-input class="date-time" label="Start Time" placeholder="none" on-click="toggleStartTime"></paper-input>
+        <h1>-</h1>
       <paper-input class="date-time" label="End Date" placeholder="none" on-click="toggleEndDate"></paper-input>
       <paper-input class="date-time" label="End Time" placeholder="none" on-click="toggleEndTime"></paper-input>
       </div>
@@ -75,23 +76,29 @@
       <paper-fab class="applyFilter" icon="check"></paper-fab>
     </paper-material>
   </template>
-    <script>
-        Polymer({
-            is: 'filter-view',
+  <script>
+    Polymer({
+      is: 'time-filter',
 
-            toggleStartDate: function() {
-              this.$.dialogStartDate.toggle();
-            },
-            toggleStartTime: function() {
-
-                document.getElementById('dialogStartTime').toggle();
-            },
-            toggleEndDate: function() {
-                document.getElementById('dialogEndDate').toggle();
-            },
-            toggleEndTime: function() {
-                document.getElementById('dialogEndTime').toggle();
-            }
-        });
-    </script>
+      properties: {
+        foo: {
+          type: String,
+          value: 'filter-view',
+          notify: true
+        }
+      },
+      toggleStartDate: function(){
+        this.$.dialogStartDate.toggle();
+      },
+      toggleStartTime: function(){
+        document.getElementById('dialogStartTime').toggle();
+      },
+      toggleEndDate: function(){
+        document.getElementById('dialogEndDate').toggle();
+      },
+      toggleEndTime: function(){
+        document.getElementById('dialogEndTime').toggle();
+      }
+    });
+  </script>
 </dom-module>

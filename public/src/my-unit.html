@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-icons.html">
+<link rel="import" href="my-chart.html">
+
+<dom-module id="my-unit">
+    <template>
+    <style include="shared-styles">
+         :host {
+            display: block;
+            padding: 10px;
+        }
+    </style>
+    <h2 id="title"></h2>
+    <my-chart chart-data="{{chartData}}"></my-chart>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-unit',
+
+            properties: {
+                page: {
+                    type: String,
+                    reflectToAttribute: true,
+                    observer: '_pageChanged'
+                },
+
+                unit: {
+                    type: Object,
+                    observer: '_unitChanged'
+                },
+
+                chartData: {
+                    type: Array,
+                    notify: true
+                }
+            },
+
+            _unitChanged: function() {
+                console.log(this.unit);
+                this.$.title.innerHTML = this.unit.value.name;
+                this._dataLoaded();
+            },
+
+            _dataLoaded: function() {
+
+                var tempChartData = [
+                    ['Time', 'Entry', 'Exit', 'Room Count']
+                ];
+
+                var records = toArray(this.unit.value.record);
+                var roomCount = 0;
+                records.forEach(function(record) {
+                    var inCount = record.entry;
+                    var outCount = record.exit;
+                    roomCount += (inCount - outCount);
+                    var time = new Date(record.end + " UTC");
+                    tempChartData.push([time, inCount, outCount, roomCount]);
+                }.bind(this));
+
+                this.chartData = tempChartData;
+            }
+        });
+
+        function toArray(obj) {
+            return Object.keys(obj).map(function(key) {
+                return obj[key];
+            });
+        }
+    </script>
+</dom-module>
