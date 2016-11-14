@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
-<link rel="import" href="../../bower_components/paper-time-picker/paper-time-picker.html">
-<link rel="import" href="../../bower_components/paper-date-picker/paper-date-picker.html">
-<link rel="import" href="../../bower_components/paper-material/paper-material.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-time-picker/paper-time-picker.html">
+<link rel="import" href="../bower_components/paper-date-picker/paper-date-picker.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
 
 <dom-module id="time-filter">
   <template>
@@ -65,7 +65,7 @@
     <paper-material elevation="1"  style="padding: 16px">
       <div class="header">FILTERS</div>
 
-      <div class="flex layout horizontal">
+      <div class="layout horizontal wrap">
       <paper-input class="date-time" label="Start Date" placeholder="none" on-click="toggleStartDate"></paper-input>
       <paper-input class="date-time" label="Start Time" placeholder="none" on-click="toggleStartTime"></paper-input>
         <h1>-</h1>
@@ -88,7 +88,7 @@
         }
       },
       toggleStartDate: function(){
-        document.getElementById('dialogStartDate').toggle();
+        this.$.dialogStartDate.toggle();
       },
       toggleStartTime: function(){
         document.getElementById('dialogStartTime').toggle();
