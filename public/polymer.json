@@ -1,5 +1,5 @@
 {
-  "entrypoint": "index.html",
+  "entrypoint": "src/index.html",
   "shell": "src/my-app.html",
   "fragments": [
     "src/my-location.html",
