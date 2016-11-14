@@ -24,7 +24,8 @@
     "vaadin-core-elements": "^1.1.2",
     "paper-menu": "PolymerElements/paper-menu#^1.2.2",
     "paper-tabs": "PolymerElements/paper-tabs#^1.6.3",
-    "paper-date-picker": "polymer-paper-date-picker#^1.2.0"
+    "paper-date-picker": "polymer-paper-date-picker#^1.2.0",
+    "paper-time-picker": "^1.1.4"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
