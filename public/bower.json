@@ -28,16 +28,5 @@
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
-  },
-  "homepage": "https://github.com/Passageway/PassagewayWeb",
-  "description": "",
-  "main": "src/my-app.html",
-  "license": "nope",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ]
+  }
 }

@@ -12,8 +12,7 @@
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
-<!-- <link rel="import" href="time-filter.html"> -->
-<!-- <link rel="import" href="filter-view.html"> -->
+<link rel="import" href="filter-view.html">
 
 <script src="https://www.gstatic.com/firebasejs/3.5.0/firebase.js"></script>
 
@@ -89,13 +88,12 @@
                 <div main-title>Passageway</div>
             </app-toolbar>
         </app-header>
-        <!-- <time-filter></time-filter> -->
-        <!-- <filter-view></filter-view> -->
+        <filter-view start-date="{{startDate}}" end-date="{{endDate}}"></filter-view>
 
         <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-            <my-location unit-data="{{unitData}}" name="location"></my-location>
+            <my-location start-date="{{startDate}}" end-date="{{endDate}}" unit-data="{{unitData}}" name="location"></my-location>
             <my-about name="about"></my-about>
-            <my-unit unit={{currentUnit}} name="unit"></my-unit>
+            <my-unit start-date="{{startDate}}" end-date="{{endDate}}" unit={{currentUnit}} name="unit"></my-unit>
             <my-view404 name="view404"></my-view404>
         </iron-pages>
     </app-header-layout>
@@ -117,8 +115,19 @@
                     notify: true,
                     observer: '_unitsChanged'
                 },
+
                 unitData: {
                     type: Array,
+                    notify: true
+                },
+
+                startDate: {
+                    type: Object,
+                    notify: true
+                },
+
+                endDate: {
+                    type: Object,
                     notify: true
                 }
             },
@@ -133,9 +142,8 @@
                 };
                 firebase.initializeApp(config);
                 this._retrieveInitData();
-                // firebase.auth().signInAnonymously().then(
-                // );
             },
+
             _retrieveInitData: function() {
                 var unitsRef = firebase.database().ref('units');
                 unitsRef.on('value', function(data) {

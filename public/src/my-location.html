@@ -17,6 +17,16 @@
         Polymer({
             is: 'my-location',
             properties: {
+                startDate: {
+                    type: Object,
+                    notify: true,
+                    observer: '_startDateChanged'
+                },
+                endDate: {
+                    type: Object,
+                    notify: true,
+                    observer: '_endDateChanged'
+                },
                 unitData: {
                     type: Array,
                     observer: '_unitDataChanged'
@@ -26,23 +36,50 @@
                     notify: true
                 }
             },
-            _unitDataChanged: function (){
-                this._addToHeatData();    
+
+            _startDateChanged: function() {
+                this._addToHeatData();
             },
-            _addToHeatData: function (){
+
+            _endDateChanged: function() {
+                this._addToHeatData();
+            },
+
+            _unitDataChanged: function() {
+                this._addToHeatData();
+            },
+
+            _addToHeatData: function() {
+                if (this.unitData == null) {
+                    return;
+                }
                 var heatArray = [];
-                this.unitData.forEach(function (unit){
+                this.unitData.forEach(function(unit) {
                     var weight = 0;
                     var records = toArray(unit.value.record);
-                    records.forEach(function (record){
-                        weight += (record.value.entry + record.value.exit);
+                    records.forEach(function(record) {
+                        var time = new Date(record.value.end + " UTC");
+                        if (this.isWithinDateRange(time)) {
+                            weight += (record.value.entry + record.value.exit);
+                        }
                     }.bind(this));
-                    heatArray.push(newHeatPoint(unit.value.lat,unit.value.lon,weight));
+                    if (weight > 0)
+                        heatArray.push(newHeatPoint(unit.value.lat, unit.value.lon, weight));
                 }.bind(this));
                 console.log(heatArray);
                 this.heatData = heatArray;
+            },
+
+
+            isWithinDateRange: function(date) {
+                if (this.startDate == null || this.endDate == null) {
+                    return true;
+                }
+                return date >= this.startDate && date <= this.endDate;
             }
+
         });
+
         function newHeatPoint(pLat, pLon, pWeight) {
             return {
                 lat: pLat,
@@ -50,6 +87,7 @@
                 weight: pWeight
             };
         }
+
         function toArray(obj) {
             return Object.keys(obj).map(function(key) {
                 return {
@@ -58,6 +96,5 @@
                 };
             });
         }
-        
     </script>
 </dom-module>

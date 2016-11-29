@@ -5,6 +5,8 @@
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../bower_components/paper-date-picker/paper-date-picker.html">
 <link rel="import" href="../bower_components/paper-time-picker/paper-time-picker.html">
+<link rel="import" href="../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<!-- Seen by Chad Teitsma at 5:10pm -->
 
 <dom-module id="filter-view">
     <template>
@@ -21,76 +23,73 @@
           right: 10px;
           bottom: -10px;
       }
-      .date-time{
-          width: 15%;
-          margin-left: 10px;
+      paper-card {
+        display: block;
+        margin: 16px;
+      }
+      .date-time {
+        width: 33%;
+        max-width: 100%;
+        margin-left: 10px;
       }
     </style>
-
-    <paper-dialog style="display:none" id="dialogStartDate" class="paper-date-picker-dialog" modal
-                  on-iron-overlay-closed="dismissDialog">
-      <paper-date-picker id="picker1" date="[[date]]"></paper-date-picker>
+    <paper-card class="horizontal layout">
+      <paper-input id="startInput" class="date-time" label="Start Date" placeholder="none" on-click="toggleStartDate"></paper-input>
+      <paper-input id="endInput" class="date-time" label="End Date" placeholder="none" on-click="toggleEndDate"></paper-input>
+  </paper-card>
+    <paper-dialog id="dialogStartDate" class="paper-date-picker-dialog" on-iron-overlay-closed="setStartDate">
+      <h3>Start Date</h3>
+      <paper-date-picker id="startPicker" date="[[date]]"></paper-date-picker>
       <div class="buttons">
-        <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button dialog-confirm>OK</paper-button>
-      </div>
+          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-confirm>OK</paper-button>
+        </div>
     </paper-dialog>
-
-    <paper-dialog style="display:none" id="dialogStartTime" class="paper-time-picker-dialog" modal
-                  on-iron-overlay-closed="dismissDialog">
-      <paper-time-picker id="timePicker1" time="[[time]]"></paper-time-picker>
+    <paper-dialog id="dialogEndDate" on-iron-overlay-closed="setEndDate">
+      <h3>End Date</h3>
+      <paper-date-picker id="endPicker" date="[[date]]"></paper-date-picker>
       <div class="buttons">
-        <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button dialog-confirm>OK</paper-button>
-      </div>
+          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-confirm>OK</paper-button>
+        </div>
     </paper-dialog>
-
-    <paper-dialog style="display:none" id="dialogEndDate" class="paper-date-picker-dialog" modal
-                  on-iron-overlay-closed="dismissDialog">
-      <paper-date-picker id="picker2" date="[[date]]"></paper-date-picker>
-      <div class="buttons">
-        <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button dialog-confirm>OK</paper-button>
-      </div>
-    </paper-dialog>
-
-    <paper-dialog style="display:none" id="dialogEndTime" class="paper-time-picker-dialog" modal
-                  on-iron-overlay-closed="dismissDialog">
-      <paper-time-picker id="timePicker2" time="[[time]]"></paper-time-picker>
-      <div class="buttons">
-        <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button dialog-confirm>OK</paper-button>
-      </div>
-    </paper-dialog>
-    <paper-material elevation="1"  style="padding: 16px">
-      <div class="header">FILTERS</div>
-
-      <div class="layout horizontal wrap">
-      <paper-input class="date-time" label="Start Date" placeholder="none" on-click="toggleStartDate"></paper-input>
-      <paper-input class="date-time" label="Start Time" placeholder="none" on-click="toggleStartTime"></paper-input>
-      <paper-input class="date-time" label="End Date" placeholder="none" on-click="toggleEndDate"></paper-input>
-      <paper-input class="date-time" label="End Time" placeholder="none" on-click="toggleEndTime"></paper-input>
-      </div>
-
-      <paper-fab class="applyFilter" icon="check"></paper-fab>
-    </paper-material>
+    <!-- <input type="submit" on-click="toggleTime" /> -->
   </template>
     <script>
         Polymer({
             is: 'filter-view',
 
-            toggleStartDate: function() {
-              this.$.dialogStartDate.toggle();
+            properties: {
+                startDate: {
+                    type: Object,
+                    notify: true
+                },
+                endDate: {
+                    type: Object,
+                    notify: true
+                }
             },
-            toggleStartTime: function() {
 
-                document.getElementById('dialogStartTime').toggle();
+            toggleStartDate: function(event) {
+                this.$.dialogStartDate.toggle();
             },
-            toggleEndDate: function() {
-                document.getElementById('dialogEndDate').toggle();
+
+            toggleEndDate: function(event) {
+                this.$.dialogEndDate.toggle();
             },
-            toggleEndTime: function() {
-                document.getElementById('dialogEndTime').toggle();
+
+            setStartDate: function(event) {
+                if (event.detail.confirmed) {
+                    this.startDate = this.$.startPicker.date;
+                    this.$.startInput.value = this.startDate;
+                }
+            },
+
+            setEndDate: function(event) {
+                if (event.detail.confirmed) {
+                    this.endDate = this.$.endPicker.date;
+                    this.$.endInput.value = this.endDate;
+                }
             }
         });
     </script>
