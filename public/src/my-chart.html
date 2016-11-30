@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/google-chart/google-chart.html">
+<link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-icons.html">
 
@@ -12,18 +13,26 @@
             padding: 6px;
         }
         google-chart {
-          width: 100%;
-          height: 600px;
+            width:100%;
+            height: 610px;
         }
     </style>
     <google-chart
       type="line"
-      options='{"hAxis": { "format": "M/d" }}'></google-chart>
+      options='{"hAxis": { "format": "M/d hh:mmaa" }}'></google-chart>
     </template>
 
     <script>
         Polymer({
             is: 'my-chart',
+            
+            behaviors: [
+                Polymer.IronResizableBehavior
+            ],
+            
+            listeners: {
+                'iron-resize': '_onIronResize'
+            },
 
             properties: {
                 chartData: {
@@ -35,6 +44,11 @@
             _chartDataChanged: function() {
                 var googleChart = this.$$('google-chart');
                 googleChart.data = this.chartData;
+            },
+            
+            _onIronResize: function() {
+                var googleChart = this.$$('google-chart');
+                googleChart.redraw();
             }
         });
     </script>

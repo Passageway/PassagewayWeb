@@ -81,8 +81,12 @@
                     if (this.isWithinDateRange(time))
                         tempChartData.push([time, inCount, outCount, roomCount]);
                 }.bind(this));
-
+                
+                if (tempChartData.length == 1)
+                    tempChartData.push([0,0,0,0]);
+                
                 this.chartData = tempChartData;
+
             },
 
             isWithinDateRange: function(date) {
