@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
@@ -75,7 +76,7 @@
           <a name="about" href="/about">About</a>
           <a name="Mackinac" href="/location/Mackinac">Mackinac</a>
           <template id='unit-repeat' is="dom-repeat" items="[[units]]" as="unit">
-            <a id="{{unit.name}}"name="{{unit.name}}" class="sublist" href="/unit/{{unit.name}}" on-click="_setUnit">{{unit.value.name}}</a>
+            <a id="{{unit.name}}"name="{{unit.name}}" class="sublist" href="/unit/{{unit.name}}" on-click="_clickUnit">{{unit.value.name}}</a>
           </template>
     </iron-selector>
     </app-drawer>
@@ -151,14 +152,18 @@
                 }.bind(this));
             },
 
-            _setUnit: function(e) {
+            _clickUnit: function(e) {
                 //console.log(e.target.id);
-                this.units.forEach(function(unit) {
-                    if (unit.name == e.target.id) {
+                this._setUnit(e.target.id);
+               
+            },
+            
+             _setUnit: function(unitName) {
+                 this.units.forEach(function(unit) {
+                    if (unit.name == unitName) {
                         this.currentUnit = unit;
                     }
                 }.bind(this));
-
             },
 
             _addToUnitData: function() {
@@ -176,6 +181,11 @@
                     }.bind(this));
                     console.log(this.units);
                     this.unitData = this.units;
+                    
+                    //select unit based on url
+                    var urlPieces = window.location.pathname.split('/');
+                    this._setUnit(urlPieces[2]);
+                    
                 }.bind(this));
             },
 

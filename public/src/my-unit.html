@@ -11,6 +11,9 @@
             display: block;
             padding: 10px;
         }
+        h2 {
+            margin-left: 10px;
+        }
     </style>
     <h2 id="title"></h2>
     <my-chart chart-data="{{chartData}}"></my-chart>
@@ -71,10 +74,10 @@
                 var records = toArray(this.unit.value.record);
                 var roomCount = 0;
                 records.forEach(function(record) {
-                    var inCount = record.entry;
-                    var outCount = record.exit;
+                    var inCount = record.value.entry;
+                    var outCount = record.value.exit;
                     roomCount += (inCount - outCount);
-                    var time = new Date(record.end + " UTC");
+                    var time = new Date(record.value.end + " UTC");
                     if (this.isWithinDateRange(time))
                         tempChartData.push([time, inCount, outCount, roomCount]);
                 }.bind(this));
@@ -92,7 +95,10 @@
 
         function toArray(obj) {
             return Object.keys(obj).map(function(key) {
-                return obj[key];
+                return {
+                    name: key,
+                    value: obj[key]
+                };
             });
         }
     </script>
