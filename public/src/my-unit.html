@@ -73,19 +73,25 @@
                 if (this.unit === undefined) {
                     return;
                 }
+
                 var tempChartData = [
                     ['Time', 'Entry', 'Exit', 'Room Count']
                 ];
 
                 var records = toArray(this.unit.value.record);
                 var roomCount = 0;
+                var lastTime = null;
                 records.forEach(function(record) {
                     var inCount = record.value.entry;
                     var outCount = record.value.exit;
                     roomCount += (inCount - outCount);
                     var time = new Date(record.value.end + " UTC");
+                    if (lastTime != undefined && lastTime.getHours() > time.getHours()) {
+                        roomCount = 0;
+                    }
                     if (this.isWithinDateRange(time))
                         tempChartData.push([time, inCount, outCount, roomCount]);
+                    lastTime = time;
                 }.bind(this));
 
                 if (tempChartData.length == 1)

@@ -99,9 +99,9 @@
                 var tempEndDate = new Date();
 
                 if (tempEndDate < tempStartDate) {
-                  this.startDate = moment(tempStartDate).subtract(1, 'day').toDate();
+                    this.startDate = moment(tempStartDate).subtract(1, 'day').toDate();
                 } else {
-                  this.startDate = tempStartDate;
+                    this.startDate = tempStartDate;
                 }
                 this.endDate = tempEndDate;
 
@@ -111,6 +111,10 @@
 
                 this.$.endInput.value = this.endDate.toDateString();
                 this.$.endTimeInput.value = formatTime(this.endDate);
+
+
+                this.$.startTimePicker.time = this.$.startTimeInput.value;
+                this.$.endTimePicker.time = this.$.endTimeInput.value;
             },
 
 
