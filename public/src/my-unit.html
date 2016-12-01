@@ -84,11 +84,11 @@
                 records.forEach(function(record) {
                     var inCount = record.value.entry;
                     var outCount = record.value.exit;
-                    roomCount += (inCount - outCount);
                     var time = new Date(record.value.end + " UTC");
                     if (lastTime != undefined && lastTime.getHours() > time.getHours()) {
                         roomCount = 0;
                     }
+                    roomCount += (inCount - outCount);
                     if (this.isWithinDateRange(time))
                         tempChartData.push([time, inCount, outCount, roomCount]);
                     lastTime = time;
