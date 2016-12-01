@@ -7,6 +7,7 @@
 <link rel="import" href="../bower_components/paper-date-picker/paper-date-picker.html">
 <link rel="import" href="../bower_components/paper-time-picker/paper-time-picker.html">
 <link rel="import" href="../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../bower_components/moment/moment.js">
 <!-- Seen by Chad Teitsma at 5:10pm -->
 
 <dom-module id="filter-view">
@@ -36,7 +37,9 @@
     </style>
     <paper-card class="horizontal layout">
       <paper-input id="startInput" class="date-time" label="Start Date" placeholder="none" on-click="toggleStartDate"></paper-input>
+      <paper-input id="startTimeInput" class="date-time" label="Start Time" placeholder="none" on-click="toggleStartTime"></paper-input>
       <paper-input id="endInput" class="date-time" label="End Date" placeholder="none" on-click="toggleEndDate"></paper-input>
+      <paper-input id="endTimeInput" class="date-time" label="End Time" placeholder="none" on-click="toggleEndTime"></paper-input>
   </paper-card>
     <paper-dialog id="dialogStartDate" class="paper-date-picker-dialog" on-iron-overlay-closed="setStartDate">
       <h3>Start Date</h3>
@@ -49,6 +52,22 @@
     <paper-dialog id="dialogEndDate" on-iron-overlay-closed="setEndDate">
       <h3>End Date</h3>
       <paper-date-picker id="endPicker" date="[[date]]"></paper-date-picker>
+      <div class="buttons">
+          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-confirm>OK</paper-button>
+        </div>
+    </paper-dialog>
+    <paper-dialog id="dialogStartTime" class="paper-time-picker-dialog" on-iron-overlay-closed="setStartTime">
+      <h3>Start Time</h3>
+      <paper-time-picker id="startTimePicker" date="[[date]]"></paper-time-picker>
+      <div class="buttons">
+          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-confirm>OK</paper-button>
+        </div>
+    </paper-dialog>
+    <paper-dialog id="dialogEndTime" class="paper-time-picker-dialog" on-iron-overlay-closed="setEndTime">
+      <h3>End Time</h3>
+      <paper-time-picker id="endTimePicker" date="[[date]]"></paper-time-picker>
       <div class="buttons">
           <paper-button dialog-dismiss>Cancel</paper-button>
           <paper-button dialog-confirm>OK</paper-button>
@@ -71,6 +90,34 @@
                 }
             },
 
+            ready: function() {
+                var tempStartDate = new Date();
+                tempStartDate.setHours(6);
+                tempStartDate.setMinutes(0);
+                tempStartDate.setSeconds(0);
+
+                var tempEndDate = new Date();
+
+                if (tempEndDate < tempStartDate) {
+                  this.startDate = moment(tempStartDate).subtract(1, 'day').toDate();
+                } else {
+                  this.startDate = tempStartDate;
+                }
+                this.endDate = tempEndDate;
+
+                this.endDate = new Date();
+                this.$.startInput.value = this.startDate.toDateString();
+                this.$.startTimeInput.value = formatTime(this.startDate);
+
+                this.$.endInput.value = this.endDate.toDateString();
+                this.$.endTimeInput.value = formatTime(this.endDate);
+            },
+
+
+            toggleStartTime: function(event) {
+                this.$.dialogStartTime.toggle();
+            },
+
             toggleStartDate: function(event) {
                 this.$.dialogStartDate.toggle();
             },
@@ -79,19 +126,61 @@
                 this.$.dialogEndDate.toggle();
             },
 
+            toggleEndTime: function(event) {
+                this.$.dialogEndTime.toggle();
+            },
+
             setStartDate: function(event) {
                 if (event.detail.confirmed) {
                     this.startDate = this.$.startPicker.date;
-                    this.$.startInput.value = this.startDate;
+                    var time = this.$.startTimePicker.time;
+                    this.startDate = getDate(this.startDate, time);
+                    this.$.startInput.value = this.startDate.toDateString();
                 }
             },
 
             setEndDate: function(event) {
                 if (event.detail.confirmed) {
                     this.endDate = this.$.endPicker.date;
-                    this.$.endInput.value = this.endDate;
+                    var time = this.$.endTimePicker.time;
+                    this.endDate = getDate(this.endDate, time);
+                    this.$.endInput.value = this.endDate.toDateString();
+                }
+            },
+
+            setStartTime: function(event) {
+                if (event.detail.confirmed) {
+                    if (this.startDate == undefined) {
+                        this.startDate = new Date();
+                    }
+                    var time = this.$.startTimePicker.time;
+                    this.startDate = getDate(this.startDate, time);
+                    this.$.startInput.value = this.startDate.toDateString();
+                    this.$.startTimeInput.value = time;
+                }
+            },
+
+            setEndTime: function(event) {
+                if (event.detail.confirmed) {
+                    if (this.endDate == undefined) {
+                        this.endDate = new Date();
+                    }
+                    var time = this.$.endTimePicker.time;
+                    this.endDate = getDate(this.endDate, time);
+                    this.$.endInput.value = this.endDate.toDateString();
+                    this.$.endTimeInput.value = time;
                 }
             }
         });
+
+        function getDate(date, formattedTime) {
+            var formattedDate = date.toDateString() + " " + formattedTime;
+            var fullDate = moment(formattedDate, "ddd MMM D YYYY hh:mm aa");
+            return fullDate.toDate();
+        }
+
+        function formatTime(date) {
+            return moment(date).format("h:mm A");
+        }
     </script>
 </dom-module>

@@ -49,12 +49,18 @@
                 }
             },
 
+            ready: function() {
+                this._dataLoaded();
+            },
+
             _startDateChanged: function() {
                 this._dataLoaded();
+                console.log(this.startDate);
             },
 
             _endDateChanged: function() {
                 this._dataLoaded();
+                console.log(this.endDate);
             },
 
             _unitChanged: function() {
@@ -64,8 +70,8 @@
             },
 
             _dataLoaded: function() {
-                if (this.unit === null) {
-                  return;
+                if (this.unit === undefined) {
+                    return;
                 }
                 var tempChartData = [
                     ['Time', 'Entry', 'Exit', 'Room Count']
@@ -81,10 +87,10 @@
                     if (this.isWithinDateRange(time))
                         tempChartData.push([time, inCount, outCount, roomCount]);
                 }.bind(this));
-                
+
                 if (tempChartData.length == 1)
-                    tempChartData.push([0,0,0,0]);
-                
+                    tempChartData.push([0, 0, 0, 0]);
+
                 this.chartData = tempChartData;
 
             },

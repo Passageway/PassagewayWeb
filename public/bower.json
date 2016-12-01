@@ -24,7 +24,8 @@
     "vaadin-components": "0.3.0-beta9",
     "zeroclipboard": "zeroclipboard/zeroclipboard#~2.2.0",
     "paper-date-picker": "polymer-paper-date-picker#^1.2.0",
-    "paper-time-picker": "^1.1.4"
+    "paper-time-picker": "^1.1.4",
+    "moment": "^2.17.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
